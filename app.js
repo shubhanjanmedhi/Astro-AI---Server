@@ -110,7 +110,8 @@ const agentBuilder = new StateGraph(MessagesAnnotation)
 const app = express();
 app.use(cors({
   origin: [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://astro-ai-fe.vercel.app/'
   ]
 }));
 app.use(bodyParser.json());
