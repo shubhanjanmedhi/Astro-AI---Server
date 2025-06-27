@@ -110,8 +110,7 @@ const agentBuilder = new StateGraph(MessagesAnnotation)
 const app = express();
 app.use(cors({
   origin: [
-    'https://astro-ai-fe.vercel.app/',
-    'https://astro-ai-server-cqps.onrender.com'
+    'https://astro-ai-fe.vercel.app',
   ]
 }));
 app.use(bodyParser.json());
