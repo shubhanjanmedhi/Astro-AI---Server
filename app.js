@@ -40,8 +40,8 @@ const astrologyPrompt = tool(
         tob: z.string().describe("time of birth of the user"),
         pob: z.string().describe("place of birth of the user"),
         gender: z.string().describe("gender of the user"),
-        palmLeft: z.string().describe("palm image of the user"),
-        palmRight: z.string().describe("palm image of the user")
+        palmLeft: z.string().describe("palm image of the user").default("Not provided"),
+        palmRight: z.string().describe("palm image of the user").default("Not provided")
         }),
     }
 );
@@ -137,15 +137,18 @@ app.post("/read", upload.fields([
     const palmLeftFile = req.files.palmLeft?.[0];
     const palmRightFile = req.files.palmRight?.[0];
 
-    if (!palmLeftFile || !palmRightFile) {
-      return res.status(400).json({ error: "Both palm images are required." });
+    let palmLeftUrl = "Not provided";
+    let palmRightUrl = "Not provided";
+
+    if (palmLeftFile) {
+      const formattedPalmLeftName = formatFilename(palmLeftFile.originalname, name);
+      palmLeftUrl = await uploadToDrive(palmLeftFile.buffer, formattedPalmLeftName, palmLeftFile.mimetype);
     }
 
-    const formattedPalmLeftName = formatFilename(palmLeftFile.originalname, name);
-    const formattedPalmRightName = formatFilename(palmRightFile.originalname, name);
-
-    const palmLeftUrl = await uploadToDrive(palmLeftFile.buffer, formattedPalmLeftName, palmLeftFile.mimetype);
-    const palmRightUrl = await uploadToDrive(palmRightFile.buffer, formattedPalmRightName, palmRightFile.mimetype);
+    if (palmRightFile) {
+      const formattedPalmRightName = formatFilename(palmRightFile.originalname, name);
+      palmRightUrl = await uploadToDrive(palmRightFile.buffer, formattedPalmRightName, palmRightFile.mimetype);
+    } 
 
     const userData = {
       name,
