@@ -3,7 +3,8 @@ const path = require('path');
 const stream = require('stream');
 
 const auth = new google.auth.GoogleAuth({
-  keyFile: path.join(__dirname, 'credentials.json'),
+  //keyFile: path.join(__dirname, 'credentials.json'),
+  keyFile: process.env.GOOGLE_DRIVE_CREDENTIALS,
   scopes: ['https://www.googleapis.com/auth/drive'],
 });
 
